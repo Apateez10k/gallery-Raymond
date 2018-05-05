@@ -10,11 +10,13 @@
     "start": "node server/index.js",
     "test": "jest --watch --coverage",
     "seed": "node database/seed.js",
+    "seed-psql": "node seedToPSQL.js",
+    "seed-mongodb": "mongoimport -d apateez-gallery -c listInit --type tsv --file seedData.tsv -f id.int32\(\),name.string\(\),photos.string\(\) --columnsHaveTypes --numInsertionWorkers 10",
     "docker": "npm run build:prod && npm run seed & npm run start",
-    "lint" : "eslint .",
-    "lint:fix" : "eslint . --fix"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
-  "author": "Yogita",
+  "author": "Yogita and Raymond",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.23.1",
@@ -29,8 +31,10 @@
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
+    "faker": "^4.1.0",
     "jest": "^22.4.3",
     "jest-enzyme": "^6.0.0",
+    "knex": "^0.14.6",
     "react-test-renderer": "^15.6.2",
     "style-loader": "^0.21.0",
     "webpack": "^3.11.0"
@@ -43,7 +47,10 @@
     "body-parser": "^1.17.0",
     "express": "^4.15.0",
     "jquery": "^3.1.1",
+    "mongodb": "^3.0.7",
     "mongoose": "^4.9.6",
+    "path": "^0.12.7",
+    "pg": "^7.4.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-icons": "^2.2.7",

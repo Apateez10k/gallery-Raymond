@@ -1,0 +1,5 @@
+node_modules/
+database/seedData.csv
+database/seedData.json
+database/seedData.tsv
+.DS_Store

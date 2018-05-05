@@ -3,8 +3,10 @@ const db = require('./index.js');
 
 mongoose.Promise = global.Promise;
 
+
+//TODO RJ modification: add numerical auto incrementing id
 const listSchema = new mongoose.Schema({
-  place_id: { unique: true, type: String },
+  id: { unique: true, type: Number },
   name: String,
   photos: Array,
 });

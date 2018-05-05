@@ -13,4 +13,3 @@ const insertfullList = function () {
 };
 
 insertfullList();
-
