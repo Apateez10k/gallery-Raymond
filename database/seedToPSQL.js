@@ -1,26 +1,24 @@
-
-var knex = require('knex')({
+const knex = require('knex')({
   client: 'pg',
   connection: {
-    host : 'localhost',
-    user : 'rj',
-    password : '',
-    database : 'apateez2'
-  }
+    host: 'localhost',
+    user: 'rj',
+    password: '',
+    database: 'apateez2',
+  },
 });
 
-var dataPath = __dirname + '/seedData.csv';
+const dataPath = `${__dirname}/seedData.csv`;
 
-var photoTable = function() {
+const photoTable = function () {
   return new Promise((resolve, reject) => {
     knex.schema.raw('CREATE TABLE photos (id integer, name text, photos text[])').then(() => {
       resolve();
     }).catch((err) => {
       reject(err);
     });
-
   });
-}
+};
 
 photoTable().then(() => {
   knex.schema.raw(`COPY photos FROM '${dataPath}' delimiter '|' csv`).then(() => {
