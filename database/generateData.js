@@ -1,3 +1,5 @@
+console.log('args: ', process.argv);
+
 // if there are no required arguments, exit
 if (process.argv[2] === undefined || process.argv[3] === undefined) {
   console.log('Missing filename or quantity arguments');
@@ -54,7 +56,7 @@ var write = function() {
       }
     } else {
       if (i === 1) {
-        writeStream.write(`[{"id":${i},"name":"${faker.company.companyName()}","photos":${photoArr}}\n`);
+        writeStream.write(`[{"id":${i},"name":"${faker.company.companyName()}","photos":${photoArr}},\n`);
       } else if (i === numRecords) {
         writeStream.write(`{"id":${i},"name":"${faker.company.companyName()}","photos":${photoArr}}]`);
       } else {
@@ -69,3 +71,5 @@ var write = function() {
   }
 };
 write();
+
+module.exports.write = write;
