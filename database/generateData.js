@@ -1,3 +1,12 @@
+const fs = require('fs');
+const faker = require('faker');
+
+// file format flags
+const isTSV = process.argv[2].includes('.tsv');
+const isCSV = process.argv[2].includes('.csv');
+const isJSON = process.argv[2].includes('.json');
+const numRecords = parseInt(process.argv[3]);
+
 // if there are no required arguments, exit
 if (process.argv[2] === undefined || process.argv[3] === undefined) {
   console.log('Missing filename or quantity arguments');
@@ -11,22 +20,10 @@ if (!process.argv[2].includes('.tsv') && !process.argv[2].includes('.csv') && !p
   process.exit(1);
 }
 
-const fs = require('fs');
-const faker = require('faker');
-
-// file format flags
-const isTSV = process.argv[2].includes('.tsv');
-const isCSV = process.argv[2].includes('.csv');
-const isJSON = process.argv[2].includes('.json');
-
-const numRecords = parseInt(process.argv[3]);
-
-
 const options = {
   autoClose: true,
 };
 const writeStream = fs.createWriteStream(process.argv[2], options);
-
 
 let photoArr;
 if (isJSON) {
@@ -66,5 +63,3 @@ const write = function () {
   }
 };
 write();
-
-module.exports.write = write;
