@@ -1,0 +1,26 @@
+const generator = require('./generateData.js');
+// pass cmd line arguments into generator as input args
+
+// I: filename (.tsv, .csv, or .json) & num of records
+// O: output file of correct format with # of records
+
+// if there are no required arguments, exit
+if (process.argv[2] === undefined || process.argv[3] === undefined) {
+  console.log('Missing filename or quantity arguments');
+  console.log('Correct use: node generateData.js <filename ending in .tsv, .csv, or .json> <number of records to generate>');
+  process.exit(1);
+}
+
+// if the filename is incorrect, exit
+if (!process.argv[2].includes('.tsv') && !process.argv[2].includes('.csv') && !process.argv[2].includes('.json')) {
+  console.log('Filename argument is not .tsv, .csv, or .json format');
+  process.exit(1);
+}
+
+generator.write(process.argv[2], process.argv[3])
+  .then(() => {
+    console.log('file write complete');
+  })
+    .catch((err) => {
+      console.log('file write error');
+    });
