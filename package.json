@@ -11,7 +11,7 @@
     "test": "jest --coverage",
     "seed": "node database/seed.js",
     "seed-psql": "node seedToPSQL.js",
-    "seed-mongodb": "mongoimport -d apateez-gallery -c listInit --type tsv --file seedData.tsv -f id.int32\\(\\),name.string\\(\\),photos.string\\(\\) --columnsHaveTypes --numInsertionWorkers 10",
+    "seed-mongodb": "mongoimport -d apateez-gallery -c lists --type tsv --file seedData.tsv -f id.int32\\(\\),name.string\\(\\),photos.string\\(\\) --columnsHaveTypes --numInsertionWorkers 10",
     "docker": "npm run build:prod && npm run seed & npm run start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"

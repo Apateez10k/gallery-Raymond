@@ -1,55 +1,65 @@
 const fs = require('fs');
 const faker = require('faker');
 
-const write = function(filename, numRecords) {
-  return new Promise((resolve, reject) => {
+let name;
+let numRec;
+let i = 1;
+let stream;
+let callback;
+
+
+const write = function(filename, numRecords, writeStream, callback) {
+    name = filename || name;
+    numRec = numRecords || numRec;
+    stream = writeStream || stream;
+    callback = callback || function() {
+      console.log('done!');
+    };
     let photoArr;
-    if (filename.includes('.json')) {
+    let isJSON = name.includes('.json');
+    let isTSV = name.includes('.tsv');
+    let isCSV = name.includes('.csv');
+    if (isJSON) {
       photoArr = '["https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco"]';
     } else {
       photoArr = '{https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco}';
     }
 
     let delimiter;
-    if (filename.includes('.tsv')) {
+    if (isTSV) {
       delimiter = '\t';
-    } else if (filename.includes('.csv')) {
+    } else if (isCSV) {
       delimiter = ',';
     }
 
-    const options = {
-      autoClose: true,
-    };
-    const writeStream = fs.createWriteStream(filename, options);
-    writeStream.on('finish', resolve);
+    stream.on('close', callback);
 
-    let i = 1;
     let ok = true;
-    while (i <= numRecords && ok) {
-      if (!filename.includes('.json')) {
-        if (i === numRecords) {
-          writeStream.write(`${i}${delimiter}"${faker.company.companyName()}"${delimiter}"${photoArr}"\n`);
+    while (i <= numRec && ok) {
+      if (!isJSON) {
+        if (i === numRec) {
+          stream.write(`${i}${delimiter}"${faker.company.companyName()}"${delimiter}"${photoArr}"\n`);
         } else {
-          ok = writeStream.write(`${i}${delimiter}"${faker.company.companyName()}"${delimiter}"${photoArr}"\n`);
+          ok = stream.write(`${i}${delimiter}"${faker.company.companyName()}"${delimiter}"${photoArr}"\n`);
         }
       } else if (i === 1) {
 
-        writeStream.write(`[{"id":${i},"name":"${faker.company.companyName()}","photos":${photoArr}},\n`);
-      } else if (i === parseInt(numRecords)) {
-        writeStream.write(`{"id":${i},"name":"${faker.company.companyName()}","photos":${photoArr}}]`);
+        stream.write(`[{"place_id":${i},"name":"${faker.company.companyName()}","photos":${photoArr}},\n`);
+      } else if (i === parseInt(numRec)) {
+        stream.write(`{"place_id":${i},"name":"${faker.company.companyName()}","photos":${photoArr}}]`);
       } else {
-        ok = writeStream.write(`{"id":${i},"name":"${faker.company.companyName()}","photos":${photoArr}},\n`);
+        ok = stream.write(`{"place_id":${i},"name":"${faker.company.companyName()}","photos":${photoArr}},\n`);
       }
       i += 1;
     }
 
-    if (i < numRecords) {
-      writeStream.once('drain', write);
-    } else if (i == numRecords + 1) {
-      writeStream.end();
+    if (i <= numRec) {
+      stream.once('drain', write);
     }
-    writeStream.once('error', reject);
-  });
+    else if (i == numRec + 1) {
+      i = 1;
+      stream.end();
+    }
 };
 
 module.exports.write = write;
