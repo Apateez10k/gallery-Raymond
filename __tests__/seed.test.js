@@ -1,5 +1,6 @@
 let generator = require('../database/generateData.js');
 const fs = require('fs');
+
 const options = {
   autoClose: true,
 };

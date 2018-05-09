@@ -24,5 +24,4 @@ let options = {
   autoClose: true,
 };
 let writeStream = fs.createWriteStream(process.argv[2], options);
-// console.log('THIS IS WRITE STREAM: ', writeStream);
 generator.write(process.argv[2], parseInt(process.argv[3]), writeStream);

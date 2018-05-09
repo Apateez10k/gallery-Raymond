@@ -7,7 +7,6 @@ let i = 1;
 let stream;
 let callback;
 
-
 const write = function(filename, numRecords, writeStream, callback) {
     name = filename || name;
     numRec = numRecords || numRec;
@@ -52,7 +51,6 @@ const write = function(filename, numRecords, writeStream, callback) {
       }
       i += 1;
     }
-
     if (i <= numRec) {
       stream.once('drain', write);
     }
