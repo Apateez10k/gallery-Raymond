@@ -1,8 +1,18 @@
+require('newrelic');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const list = require('../database/list.js');
 const mockData = require('./mockData.js');
+const redis = require('redis');
+const redisClient = redis.createClient();
+
+//// if you'd like to select database 3, instead of 0 (default), call if you'd lik
+// client.select(3, function() { /* ... */ });
+
+redisClient.on("error", function (err) {
+    console.log("Error " + err);
+});
 
 const app = express();
 const PORT = 3002;
@@ -21,22 +31,21 @@ app.get('/restaurants/:id', (req, res) => {
 });
 
 app.get('/api/restaurants/:id/gallery', (req, res) => {
-  const query = list.findOne({ place_id: req.params.id });
-  query.exec((err, photos) => {
+  redisClient.get(req.params.id, (err, redisRes) => {
     if (err) {
-      console.log(err);
+      console.log('cache query error:');
+      throw err;
+    } else if (redisRes !== null) {
+      res.send(redisRes);
     } else {
-      // var s3String = '//s3-us-west-1.amazonaws.com/apateezgallery93/';
-      // const restaurantPhotosArray = [];
-      // if (!photos) { // error handling to avoid server stopping to non-existent place_id
-      //   photos = mockData;
-      // }
-      // for (let i = 0; i < photos.photos.length; i++) {
-      //   var s3String = `//s3-us-west-1.amazonaws.com/apateezgallery93/${photos.photos[i].photo_reference}.png`;
-      //   restaurantPhotosArray.push(s3String);
-      // }
-      console.log({ photoArray: photos.photos, restaurantName: photos.name, place_id: photos.place_id });
-      res.send({ photoArray: photos.photos, restaurantName: photos.name, place_id: photos.place_id });
+      list.find({ place_id: req.params.id }).lean()
+        .then((photos) => {
+          redisClient.set(req.params.id, JSON.stringify(photos[0]), 'EX', 1800);
+          res.send(photos[0]);
+        })
+          .catch((err) => {
+            console.log(err);
+          });
     }
   });
 });
@@ -65,38 +74,3 @@ app.get('/:searchValue', (req, res) => {
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
-
-// const fs = require('fs');
-// const requestImg = require('request').defaults({ encoding: null });
-// const url = require('url');
-
-// script for saving 1000 images locally
-// var j =1;
-// list.find(function(err, data){
-//    if (err){
-//     console.log(err);
-//    } else{
-
-//        data.map(function(restaurant){
-
-//            restaurant.photos.map(function(photo){
-//              //photo_reference = photo.photo_reference;
-//              requestImg.get
-//                 ("https://maps.googleapis.com/maps/api/place/photo?maxwidth=1000&photoreference="+photo.photo_reference+"&key=AIzaSyD7olNRQRLF6mNFwI0dyEyECWNqF8xXNZQ", function(error, response, body){
-//          if (error){
-//            console.log(error)
-
-//          }else{
-//          console.log("writeFile---" + photo.photo_reference);
-//            fs.writeFile(__dirname+'/n/'+
-// photo.photo_reference+'.png', body, function(){console.log(j++)} );
-//          }
-//           })
-//          })
-
-//        })
-//   }
-
-// })
-
-// res.end();
