@@ -36,7 +36,7 @@ app.get('/api/restaurants/:id/gallery', (req, res) => {
       //   var s3String = `//s3-us-west-1.amazonaws.com/apateezgallery93/${photos.photos[i].photo_reference}.png`;
       //   restaurantPhotosArray.push(s3String);
       // }
-      console.log({ photoArray: photos.photos, restaurantName: photos.name, place_id: photos.place_id });
+      //console.log({ photoArray: photos.photos, restaurantName: photos.name, place_id: photos.place_id });
       res.send({ photoArray: photos.photos, restaurantName: photos.name, place_id: photos.place_id });
     }
   });

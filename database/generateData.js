@@ -6,20 +6,28 @@ let numRec;
 let i = 1;
 let stream;
 let callback;
+let options = {
+  autoClose: true,
+};
+let writeStream = fs.createWriteStream('seedData.json', options);
+writeStream.on('close', () => {
+  console.log('done!');
+});
 
-const write = function(filename, numRecords, writeStream, callback) {
+const write = function(filename, numRecords) {
     name = filename || name;
     numRec = numRecords || numRec;
     stream = writeStream || stream;
-    callback = callback || function() {
-      console.log('done!');
-    };
+    //console.log('stream: ', stream);
+    // callback = callback || function() {
+    //   console.log('done!');
+    // };
     let photoArr;
     let isJSON = name.includes('.json');
     let isTSV = name.includes('.tsv');
     let isCSV = name.includes('.csv');
     if (isJSON) {
-      photoArr = '["https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco","https://loremflickr.com/3000/2000/sanfrancisco"]';
+      photoArr = "[\"https://loremflickr.com/3000/2000/sanfrancisco\",\"https://loremflickr.com/3000/2000/sanfrancisco\",\"https://loremflickr.com/3000/2000/sanfrancisco\",\"https://loremflickr.com/3000/2000/sanfrancisco\",\"https://loremflickr.com/3000/2000/sanfrancisco\",\"https://loremflickr.com/3000/2000/sanfrancisco\",\"https://loremflickr.com/3000/2000/sanfrancisco\",\"https://loremflickr.com/3000/2000/sanfrancisco\",\"https://loremflickr.com/3000/2000/sanfrancisco\",\"https://loremflickr.com/3000/2000/sanfrancisco\"]";
     } else {
       photoArr = '{https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco}';
     }
@@ -31,7 +39,7 @@ const write = function(filename, numRecords, writeStream, callback) {
       delimiter = ',';
     }
 
-    stream.on('close', callback);
+    // stream.on('close', callback);
 
     let ok = true;
     while (i <= numRec && ok) {
