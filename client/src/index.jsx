@@ -55,7 +55,8 @@ class ApateezGallery extends React.Component {
     // `${BASE_URL}/api/restaurants/${id}/gallery`
     axios.get(`http://localhost:3002/api/restaurants/${id}/gallery`)
     .then(({data}) => {
-        appContext.setState({images: JSON.parse(data.photoArray), restaurantName: data.restaurantName, place_id:data.place_id});
+      console.log('this is the response: ', data);
+        appContext.setState({images: data.photoArray, restaurantName: data.restaurantName, place_id:data.place_id});
     })
     .catch((err) => console.log(err));
   }
@@ -151,4 +152,5 @@ class ApateezGallery extends React.Component {
   }
 }
 
-ReactDOM.render(< ApateezGallery/>, document.getElementById('app'));
+// ReactDOM.render(< ApateezGallery/>, document.getElementById('app'));
+export default ApateezGallery;
