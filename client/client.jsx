@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 import ApateezGallery from './src/index.jsx';
 
 const Gallery = () => (
-  <ApateezGallery />
+  <div>
+    <ApateezGallery />
+  </div>
 );
 
 const GalleryLoader = (id) => {

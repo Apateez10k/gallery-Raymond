@@ -25,7 +25,7 @@ const write = function(filename, numRecords, writeStream, callback) {
     let isTSV = name.includes('.tsv');
     let isCSV = name.includes('.csv');
     if (isJSON) {
-      photoArr = `\"['https://loremflickr.com/3000/2000/sanfrancisco', 'https://loremflickr.com/3000/2000/sanfrancisco', 'https://loremflickr.com/3000/2000/sanfrancisco', 'https://loremflickr.com/3000/2000/sanfrancisco', 'https://loremflickr.com/3000/2000/sanfrancisco', 'https://loremflickr.com/3000/2000/sanfrancisco', 'https://loremflickr.com/3000/2000/sanfrancisco', 'https://loremflickr.com/3000/2000/sanfrancisco', 'https://loremflickr.com/3000/2000/sanfrancisco', 'https://loremflickr.com/3000/2000/sanfrancisco']\"`;
+      photoArr = `["https://loremflickr.com/3000/2000/sanfrancisco", "https://loremflickr.com/3000/2000/sanfrancisco", "https://loremflickr.com/3000/2000/sanfrancisco", "https://loremflickr.com/3000/2000/sanfrancisco", "https://loremflickr.com/3000/2000/sanfrancisco", "https://loremflickr.com/3000/2000/sanfrancisco", "https://loremflickr.com/3000/2000/sanfrancisco", "https://loremflickr.com/3000/2000/sanfrancisco", "https://loremflickr.com/3000/2000/sanfrancisco", "https://loremflickr.com/3000/2000/sanfrancisco"]`;
     } else {
       photoArr = '{https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco,https://loremflickr.com/3000/2000/sanfrancisco}';
     }

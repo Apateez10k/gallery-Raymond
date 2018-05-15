@@ -1,9 +1,10 @@
-require('newrelic');
+//require('newrelic');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const list = require('../database/list.js');
 const mockData = require('./mockData.js');
+const morgan = require('morgan');
 const redis = require('redis');
 const redisClient = redis.createClient();
 
@@ -16,6 +17,7 @@ redisClient.on("error", function (err) {
 
 const app = express();
 const PORT = 3002;
+app.use(morgan('dev'));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -24,10 +26,11 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/restaurants/', express.static(`${__dirname}/../client/dist`));
+// app.use('/restaurants/', express.static(`${__dirname}/../client/dist`));
+app.use('/restaurants/', express.static(`${__dirname}/../public`));
 
 app.get('/restaurants/:id', (req, res) => {
-  res.sendFile(path.join(`${__dirname}/../client/dist/index.html`));
+  res.sendFile(path.join(`${__dirname}/../public/index.html`));
 });
 
 app.get('/api/restaurants/:id/gallery', (req, res) => {

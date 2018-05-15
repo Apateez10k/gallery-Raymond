@@ -27,13 +27,16 @@ class ApateezGallery extends React.Component {
     this.clickHandleView = this.clickHandleView.bind(this);
     this.searchRestaurant = this.searchRestaurant.bind(this);
   }
-  componentWillMount(){
-    Modal.setAppElement(document.getElementById('app'));
-  }
+  // componentWillMount(){
+  //   Modal.setAppElement(document.getElementById('app'));
+  // }
   componentDidMount(){
-    var id = window.location.href.split('restaurants/')[1];
-    //ajax request for getting the photos and name of restaurant
-    this.getRequestWithId(id);
+    if (window) {
+      Modal.setAppElement(document.getElementById('app'));
+      var id = window.location.href.split('restaurants/')[1];
+      //ajax request for getting the photos and name of restaurant
+      this.getRequestWithId(id);
+    }
   }
   gotoHotNew(){
     location.href = '/restaurants/' + 'ChIJA8_SN2eAhYARCIvEx44Zvfw' ;
@@ -56,7 +59,7 @@ class ApateezGallery extends React.Component {
     axios.get(`http://localhost:3002/api/restaurants/${id}/gallery`)
     .then(({data}) => {
       console.log('this is the response: ', data);
-        appContext.setState({images: data.photoArray, restaurantName: data.restaurantName, place_id:data.place_id});
+      appContext.setState({images: data.photoArray, restaurantName: data.restaurantName, place_id:data.place_id});
     })
     .catch((err) => console.log(err));
   }
