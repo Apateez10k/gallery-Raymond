@@ -7,19 +7,19 @@ const redisClient = redis.createClient();
 describe('redis cache should', () => {
   test('contain the same data as in mongoDB for the same restaurant id', (done) => {
     axios('http://localhost:3002/api/restaurants/7/gallery')
-      .then(response => {
+      .then(() => {
         redisClient.get('7', (err, redisRes) => {
           if (err) {
             console.log('document not in redis!');
             expect(err).not.toBe(err);
             done();
           } else {
-            list.find({place_id: '7'})
+            list.find({ place_id: '7' })
               .then(photos => {
                 expect(redisRes).toBe(JSON.stringify(photos[0]));
                 done();
               })
-              .catch(err => {
+              .catch((err) => {
                 console.log('document not in mongoDB!');
                 expect(err).not.toBe(err);
                 done();
@@ -27,7 +27,7 @@ describe('redis cache should', () => {
           }
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('axios error: ', err);
         done();
       });
