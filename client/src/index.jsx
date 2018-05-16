@@ -27,9 +27,7 @@ class ApateezGallery extends React.Component {
     this.clickHandleView = this.clickHandleView.bind(this);
     this.searchRestaurant = this.searchRestaurant.bind(this);
   }
-  // componentWillMount(){
-  //   Modal.setAppElement(document.getElementById('app'));
-  // }
+
   componentDidMount(){
     if (window) {
       Modal.setAppElement(document.getElementById('app'));

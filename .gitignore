@@ -2,4 +2,5 @@ node_modules/
 database/seedData.csv
 database/seedData.json
 database/seedData.tsv
+public/
 .DS_Store

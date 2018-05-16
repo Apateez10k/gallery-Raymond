@@ -1,5 +1,4 @@
 const generator = require('./generateData.js');
-const fs = require('fs');
 // pass cmd line arguments into generator as input args
 
 // I: filename (.tsv, .csv, or .json) & num of records
@@ -20,8 +19,4 @@ if (!process.argv[2].includes('.tsv') && !process.argv[2].includes('.csv') && !p
 
 console.log('FILENAME: ', process.argv[2]);
 console.log('NUM RECORDS: ', typeof parseInt(process.argv[3]));
-// let options = {
-//   autoClose: true,
-// };
-// let writeStream = fs.createWriteStream(process.argv[2], options);
 generator.write(process.argv[2], parseInt(process.argv[3]));

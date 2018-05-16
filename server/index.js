@@ -1,18 +1,18 @@
-//require('newrelic');
+require('newrelic');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const list = require('../database/list.js');
-const mockData = require('./mockData.js');
 const morgan = require('morgan');
 const redis = require('redis');
+
 const redisClient = redis.createClient();
 
 //// if you'd like to select database 3, instead of 0 (default), call if you'd lik
 // client.select(3, function() { /* ... */ });
 
-redisClient.on("error", function (err) {
-    console.log("Error " + err);
+redisClient.on('error', err => {
+  console.log('Error ', err);
 });
 
 const app = express();
@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// app.use('/restaurants/', express.static(`${__dirname}/../client/dist`));
+
 app.use('/restaurants/', express.static(`${__dirname}/../public`));
 
 app.get('/restaurants/:id', (req, res) => {
@@ -42,13 +42,13 @@ app.get('/api/restaurants/:id/gallery', (req, res) => {
       res.send(redisRes);
     } else {
       list.find({ place_id: req.params.id }).lean()
-        .then((photos) => {
+        .then(photos => {
           redisClient.set(req.params.id, JSON.stringify(photos[0]), 'EX', 1800);
           res.send(photos[0]);
         })
-          .catch((err) => {
-            console.log(err);
-          });
+        .catch(err => {
+          console.log(err);
+        });
     }
   });
 });
