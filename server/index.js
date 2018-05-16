@@ -7,6 +7,7 @@ const mockData = require('./mockData.js');
 
 const app = express();
 const PORT = 3002;
+
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
