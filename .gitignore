@@ -8,3 +8,4 @@ public/server.js
 newrelic/
 newrelic_agent.log
 newrelic.js
+redis-4.0.9/
