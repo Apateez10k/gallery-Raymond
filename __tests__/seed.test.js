@@ -1,4 +1,4 @@
-let generator = require('../database/generateData.js');
+const generator = require('../database/generateData.js');
 const fs = require('fs');
 
 const options = {
@@ -6,7 +6,6 @@ const options = {
 };
 
 describe('Data generation script', () => {
-
   test('can generate .csv file with arbitrary number of records', (done) => {
     generator.write('seedData50.csv', 50, fs.createWriteStream('seedData50.csv', options), () => {
       fs.readFile('../database/seedData50.csv', 'utf8', (err, data) => {
@@ -57,7 +56,7 @@ describe('Data generation script', () => {
             expect(typeof contents[i].name).toBe('string');
             expect(Array.isArray(contents[i].photos)).toBe(true);
             expect(contents[i].photos.length).toBe(10);
-            for (var j = 0; j < contents[i].photos.length; j += 1) {
+            for (let j = 0; j < contents[i].photos.length; j += 1) {
               expect(contents[i].photos[j]).toBe('https://loremflickr.com/3000/2000/sanfrancisco');
             }
             if (i === 49) {

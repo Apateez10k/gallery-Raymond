@@ -1,2 +1,4 @@
 coverage/
 client/dist/bundle.js
+public/
+newrelic/
