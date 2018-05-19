@@ -57,7 +57,7 @@ class ApateezGallery extends React.Component {
     axios.get(`http://localhost:3002/api/restaurants/${id}/gallery`)
     .then(({data}) => {
       console.log('this is the response: ', data);
-      appContext.setState({images: data.photoArray, restaurantName: data.restaurantName, place_id:data.place_id});
+      appContext.setState({ images: data.photoArray, restaurantName: data.restaurantName, place_id: data.place_id });
     })
     .catch((err) => console.log(err));
   }
