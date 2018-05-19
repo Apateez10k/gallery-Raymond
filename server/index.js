@@ -6,12 +6,17 @@ const list = require('../database/list.js');
 const morgan = require('morgan');
 const redis = require('redis');
 
-const redisClient = redis.createClient();
+const localRedisClient = redis.createClient();
+const remoteRedisClient = redis.createClient({ host: '52.52.39.53', port: 6379 });
 
 //// if you'd like to select database 3, instead of 0 (default), call if you'd lik
 // client.select(3, function() { /* ... */ });
 
-redisClient.on('error', err => {
+localRedisClient.on('error', err => {
+  console.log('Error ', err);
+});
+
+remoteRedisClient.on('error', err => {
   console.log('Error ', err);
 });
 
@@ -34,23 +39,35 @@ app.get('/restaurants/:id', (req, res) => {
 });
 
 app.get('/api/restaurants/:id/gallery', (req, res) => {
-  redisClient.get(req.params.id, (err, redisRes) => {
+  //get from remoteRedis first. if not in remote redis, get from localRedis
+  remoteRedisClient.get(req.params.id, (err, remoteRedisRes) => {
     if (err) {
-      console.log('cache query error:');
+      console.log('remote cache query error:');
       throw err;
-    } else if (redisRes !== null) {
-      res.send(redisRes);
+    } else if (remoteRedisRes !== null) {
+      res.send(remoteRedisRes);
     } else {
-      list.find({ place_id: req.params.id }).lean()
-        .then(photos => {
-          redisClient.set(req.params.id, JSON.stringify(photos[0]), 'EX', 1800);
-          res.send(photos[0]);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      localRedisClient.get(req.params.id, (err, localRedisRes) => {
+        if (err) {
+          console.log('instance cache query error:');
+          throw err;
+        } else if (localRedisRes !== null) {
+          remoteRedisClient.set(req.params.id, localRedisRes, 'EX', 1800);
+          res.send(localRedisRes);
+        } else {
+          list.find({ place_id: req.params.id }).lean()
+            .then(photos => {
+              localRedisClient.set(req.params.id, JSON.stringify(photos[0]), 'EX', 1800);
+              res.send(photos[0]);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      });
     }
   });
+
 });
 
 // search Functionality in header
